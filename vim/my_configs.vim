@@ -7,6 +7,7 @@ set ts=4
 set sts=4
 set sw=1
 set autowrite
+" 외부에서 파일이 변경되면 자동으로 읽어오기
 set autoread
 set cindent
 set bs=eol,start,indent
@@ -38,4 +39,16 @@ set ambiwidth=double
 "    Ps = 6  -> steady bar (xterm).
 let &t_SI = "\e[5 q" " insert mode
 let &t_EI = "\e[1 q" " normal mode
+
+
+" 1. Vim으로 다시 포커스가 돌아올 때 체크
+au FocusGained,BufEnter * checktime
+
+" 2. (강력 추천) 아무 키도 안 누르고 가만히 있을 때(CursorHold) 정기적으로 체크
+" 기본값이 4초(4000ms)이므로 1초 정도로 줄이면 더 빠릿합니다.
+set updatetime=3000
+au CursorHold,CursorHoldI * checktime
+
+" 3. 파일이 자동으로 로드될 때 알림 메시지 출력 (선택 사항)
+au FileChangedShellPost * echohl WarningMsg | echo "파일이 외부에서 변경되어 새로고침되었습니다!(" . strftime("%H:%M:%S") . ")" | echohl None
 
