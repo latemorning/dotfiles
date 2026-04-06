@@ -45,10 +45,13 @@ install_tmux() {
         git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
     fi
 
-    # catppuccin 플러그인 설치
+    # catppuccin 플러그인 설치 및 업데이트
     if [ ! -d ~/.tmux/plugins/tmux ]; then
         echo "catppuccin 테마 설치 중..."
         git clone https://github.com/catppuccin/tmux ~/.tmux/plugins/tmux
+    else
+        echo "catppuccin 테마 업데이트 중..."
+        git -C ~/.tmux/plugins/tmux pull
     fi
 
     # 심볼릭 링크 생성
