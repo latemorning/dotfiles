@@ -20,6 +20,18 @@ install_vim() {
 install_tmux() {
     echo "=== tmux 설치 시작 ==="
 
+    # Homebrew 확인
+    if ! command -v brew &>/dev/null; then
+        echo "Homebrew가 없습니다. 설치 중..."
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    fi
+
+    # tmux 설치
+    if ! command -v tmux &>/dev/null; then
+        echo "tmux 설치 중..."
+        brew install tmux
+    fi
+
     # TPM 설치
     if [ ! -d ~/.tmux/plugins/tpm ]; then
         echo "TPM(Tmux Plugin Manager) 설치 중..."
