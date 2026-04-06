@@ -1,16 +1,56 @@
 #!/bin/bash
 
-echo "=== vim dotfiles 설치 시작 ==="
+COMPONENT=${1:-all}
 
-# amix/vimrc 설치
-if [ ! -d ~/.vim_runtime ]; then
-    echo "amix/vimrc 설치 중..."
-    git clone --depth=1 https://github.com/amix/vimrc.git ~/.vim_runtime
-    sh ~/.vim_runtime/install_awesome_vimrc.sh
-fi
+install_vim() {
+    echo "=== vim 설치 시작 ==="
 
-# 심볼릭 링크 생성
-echo "심볼릭 링크 생성 중..."
-ln -sf ~/dotfiles/vim/my_configs.vim ~/.vim_runtime/my_configs.vim
+    if [ ! -d ~/.vim_runtime ]; then
+        echo "amix/vimrc 설치 중..."
+        git clone --depth=1 https://github.com/amix/vimrc.git ~/.vim_runtime
+        sh ~/.vim_runtime/install_awesome_vimrc.sh
+    fi
 
-echo "=== 설치 완료! ==="
+    echo "심볼릭 링크 생성 중..."
+    ln -sf ~/dotfiles/vim/my_configs.vim ~/.vim_runtime/my_configs.vim
+
+    echo "=== vim 설치 완료! ==="
+}
+
+install_tmux() {
+    echo "=== tmux 설치 시작 ==="
+
+    # TPM 설치
+    if [ ! -d ~/.tmux/plugins/tpm ]; then
+        echo "TPM(Tmux Plugin Manager) 설치 중..."
+        git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+    fi
+
+    # 심볼릭 링크 생성
+    echo "심볼릭 링크 생성 중..."
+    ln -sf ~/dotfiles/tmux/tmux.conf ~/.tmux.conf
+
+    echo ""
+    echo "=== tmux 설치 완료! ==="
+    echo "tmux 실행 후 Prefix + I 를 눌러 플러그인을 설치하세요."
+}
+
+case "$COMPONENT" in
+    vim)
+        install_vim
+        ;;
+    tmux)
+        install_tmux
+        ;;
+    all)
+        install_vim
+        install_tmux
+        ;;
+    *)
+        echo "Usage: ./install.sh [vim|tmux|all]"
+        echo "  vim   - vim 설정만 설치"
+        echo "  tmux  - tmux 설정만 설치"
+        echo "  all   - 전체 설치 (기본값)"
+        exit 1
+        ;;
+esac
