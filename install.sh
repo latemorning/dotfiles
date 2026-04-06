@@ -32,10 +32,23 @@ install_tmux() {
         brew install tmux
     fi
 
+    # Nerd Font 설치
+    if ! fc-list 2>/dev/null | grep -qi "JetBrainsMono Nerd" && \
+       ! ls ~/Library/Fonts/ 2>/dev/null | grep -qi "JetBrainsMonoNerdFont"; then
+        echo "JetBrains Mono Nerd Font 설치 중..."
+        brew install --cask font-jetbrains-mono-nerd-font
+    fi
+
     # TPM 설치
     if [ ! -d ~/.tmux/plugins/tpm ]; then
         echo "TPM(Tmux Plugin Manager) 설치 중..."
         git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+    fi
+
+    # catppuccin 플러그인 설치
+    if [ ! -d ~/.tmux/plugins/tmux ]; then
+        echo "catppuccin 테마 설치 중..."
+        git clone https://github.com/catppuccin/tmux ~/.tmux/plugins/tmux
     fi
 
     # 심볼릭 링크 생성
@@ -44,7 +57,8 @@ install_tmux() {
 
     echo ""
     echo "=== tmux 설치 완료! ==="
-    echo "tmux 실행 후 Prefix + I 를 눌러 플러그인을 설치하세요."
+    echo "터미널 폰트를 'JetBrainsMono Nerd Font'로 변경하세요."
+    echo "tmux 실행 후 Prefix + I 를 눌러 나머지 플러그인을 설치하세요."
 }
 
 case "$COMPONENT" in
