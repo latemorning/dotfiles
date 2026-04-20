@@ -158,6 +158,34 @@ install_ghostty() {
     echo "=== Ghostty 설치 완료! ==="
 }
 
+install_java() {
+    echo "=== Java 설치 시작 ==="
+
+    if ! command -v brew &>/dev/null; then
+        echo "Homebrew가 없습니다. 설치 중..."
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    fi
+
+    # Amazon Corretto 21 (기본값)
+    if ! brew list --cask corretto@21 &>/dev/null; then
+        echo "Amazon Corretto 21 설치 중..."
+        brew install --cask corretto@21
+    else
+        echo "Amazon Corretto 21 이미 설치되어 있습니다."
+    fi
+
+    # Amazon Corretto 17
+    if ! brew list --cask corretto@17 &>/dev/null; then
+        echo "Amazon Corretto 17 설치 중..."
+        brew install --cask corretto@17
+    else
+        echo "Amazon Corretto 17 이미 설치되어 있습니다."
+    fi
+
+    echo "=== Java 설치 완료! ==="
+    echo "설치된 버전 확인: /usr/libexec/java_home -V"
+}
+
 install_maven() {
     echo "=== Maven 설치 시작 ==="
 
@@ -273,6 +301,9 @@ case "$COMPONENT" in
     localsend)
         install_localsend
         ;;
+    java)
+        install_java
+        ;;
     maven)
         install_maven
         ;;
@@ -284,6 +315,7 @@ case "$COMPONENT" in
         ;;
     all)
         install_zsh
+        install_java
         install_vim
         install_tmux
         install_karabiner
@@ -294,13 +326,14 @@ case "$COMPONENT" in
         install_discretescroll
         ;;
     *)
-        echo "Usage: ./install.sh [zsh|vim|tmux|karabiner|ghostty|localsend|maven|dbeaver|discretescroll|all]"
+        echo "Usage: ./install.sh [zsh|vim|tmux|karabiner|ghostty|localsend|java|maven|dbeaver|discretescroll|all]"
         echo "  zsh             - zsh 설정 (oh-my-zsh, powerlevel9k, bat, fasd)"
         echo "  vim             - vim 설정만 설치"
         echo "  tmux            - tmux 설정만 설치"
         echo "  karabiner       - Karabiner-Elements 설정만 설치"
         echo "  ghostty         - Ghostty 설치 및 설정"
         echo "  localsend       - LocalSend 설치"
+        echo "  java            - Amazon Corretto 17, 21 설치"
         echo "  maven           - Maven 설치 및 settings.xml 템플릿 적용"
         echo "  dbeaver         - DBeaver Community 설치"
         echo "  discretescroll  - DiscreteScroll 설치"
