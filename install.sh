@@ -158,6 +158,24 @@ install_ghostty() {
     echo "=== Ghostty 설치 완료! ==="
 }
 
+install_dbeaver() {
+    echo "=== DBeaver 설치 시작 ==="
+
+    if ! command -v brew &>/dev/null; then
+        echo "Homebrew가 없습니다. 설치 중..."
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    fi
+
+    if ! brew list --cask dbeaver-community &>/dev/null; then
+        echo "DBeaver 설치 중..."
+        brew install --cask dbeaver-community
+    else
+        echo "DBeaver 이미 설치되어 있습니다."
+    fi
+
+    echo "=== DBeaver 설치 완료! ==="
+}
+
 install_localsend() {
     echo "=== LocalSend 설치 시작 ==="
 
@@ -214,6 +232,9 @@ case "$COMPONENT" in
     localsend)
         install_localsend
         ;;
+    dbeaver)
+        install_dbeaver
+        ;;
     discretescroll)
         install_discretescroll
         ;;
@@ -224,16 +245,18 @@ case "$COMPONENT" in
         install_karabiner
         install_ghostty
         install_localsend
+        install_dbeaver
         install_discretescroll
         ;;
     *)
-        echo "Usage: ./install.sh [zsh|vim|tmux|karabiner|ghostty|localsend|discretescroll|all]"
+        echo "Usage: ./install.sh [zsh|vim|tmux|karabiner|ghostty|localsend|dbeaver|discretescroll|all]"
         echo "  zsh             - zsh 설정 (oh-my-zsh, powerlevel9k, bat, fasd)"
         echo "  vim             - vim 설정만 설치"
         echo "  tmux            - tmux 설정만 설치"
         echo "  karabiner       - Karabiner-Elements 설정만 설치"
         echo "  ghostty         - Ghostty 설치 및 설정"
         echo "  localsend       - LocalSend 설치"
+        echo "  dbeaver         - DBeaver Community 설치"
         echo "  discretescroll  - DiscreteScroll 설치"
         echo "  all             - 전체 설치 (기본값)"
         exit 1
