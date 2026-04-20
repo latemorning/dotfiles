@@ -173,6 +173,17 @@ install_dbeaver() {
         echo "DBeaver 이미 설치되어 있습니다."
     fi
 
+    # 접속 설정 템플릿 복사 (없는 경우만)
+    DBEAVER_CONFIG="$HOME/Library/DBeaverData/workspace6/General/.dbeaver"
+    if [ ! -f "$DBEAVER_CONFIG/data-sources.json" ]; then
+        echo "DBeaver 접속 설정 템플릿 복사 중..."
+        mkdir -p "$DBEAVER_CONFIG"
+        cp ~/dotfiles/dbeaver/data-sources.example.json "$DBEAVER_CONFIG/data-sources.json"
+        echo "⚠️  $DBEAVER_CONFIG/data-sources.json 에서 REPLACE_HOST를 실제 호스트로 수정하세요."
+    else
+        echo "DBeaver 접속 설정이 이미 존재합니다. 템플릿: ~/dotfiles/dbeaver/data-sources.example.json"
+    fi
+
     echo "=== DBeaver 설치 완료! ==="
 }
 

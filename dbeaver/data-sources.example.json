@@ -1,0 +1,126 @@
+{
+	"folders": {},
+	"connections": {
+		"postgres-jdbc-19d762a1e9b-14fb9dd22dab65db": {
+			"provider": "postgresql",
+			"driver": "postgres-jdbc",
+			"name": "1. [TB] pointhub phub",
+			"save-password": true,
+			"configuration": {
+				"host": "REPLACE_HOST",
+				"port": "5432",
+				"database": "pointhub",
+				"url": "jdbc:postgresql://REPLACE_HOST:5432/pointhub",
+				"configurationType": "MANUAL",
+				"home": "/opt/homebrew/Cellar/libpq/18.3",
+				"type": "dev",
+				"closeIdleConnection": true,
+				"properties": {
+					"connectTimeout": "20",
+					"loginTimeout": "20",
+					"escapeSyntaxCallMode": "callIfNoReturn"
+				},
+				"provider-properties": {
+					"@dbeaver-show-non-default-db@": "false",
+					"@dbeaver-chosen-role@": "",
+					"@dbeaver-show-template-db@": "false",
+					"@dbeaver-show-unavailable-db@": "false",
+					"show-database-statistics": "false",
+					"@dbeaver-read-all-data-types-db@": "false",
+					"read-keys-with-columns": "false",
+					"replace-legacy-timezone": "false",
+					"@dbeaver-use-prepared-statements-db@": "false",
+					"postgresql.dd.plain.string": "false",
+					"postgresql.dd.tag.string": "false"
+				},
+				"auth-model": "native"
+			}
+		},
+		"postgres-jdbc-19d7609b9f4-beb69c7689ec9d9": {
+			"provider": "postgresql",
+			"driver": "postgres-jdbc",
+			"name": "2. [TB] pointhub_local phub",
+			"save-password": true,
+			"configuration": {
+				"host": "REPLACE_HOST",
+				"port": "5432",
+				"database": "pointhub_local",
+				"url": "jdbc:postgresql://REPLACE_HOST:5432/pointhub_local",
+				"configurationType": "MANUAL",
+				"home": "/opt/homebrew/Cellar/libpq/18.3",
+				"type": "dev",
+				"closeIdleConnection": true,
+				"properties": {
+					"connectTimeout": "20",
+					"loginTimeout": "20",
+					"escapeSyntaxCallMode": "callIfNoReturn"
+				},
+				"provider-properties": {
+					"@dbeaver-show-non-default-db@": "false",
+					"@dbeaver-chosen-role@": "",
+					"@dbeaver-show-template-db@": "false",
+					"@dbeaver-show-unavailable-db@": "false",
+					"show-database-statistics": "false",
+					"@dbeaver-read-all-data-types-db@": "false",
+					"read-keys-with-columns": "false",
+					"replace-legacy-timezone": "false",
+					"@dbeaver-use-prepared-statements-db@": "false",
+					"postgresql.dd.plain.string": "false",
+					"postgresql.dd.tag.string": "false"
+				},
+				"auth-model": "native"
+			}
+		},
+		"postgres-jdbc-19d962bc863-1a22f11d3acbef48": {
+			"provider": "postgresql",
+			"driver": "postgres-jdbc",
+			"name": "3. [local] pointhub_local phub",
+			"save-password": true,
+			"configuration": {
+				"host": "REPLACE_LOCAL_HOST",
+				"port": "5432",
+				"database": "pointhub_local",
+				"url": "jdbc:postgresql://REPLACE_LOCAL_HOST:5432/pointhub_local",
+				"configurationType": "MANUAL",
+				"home": "/opt/homebrew/Cellar/libpq/18.3",
+				"type": "dev",
+				"closeIdleConnection": true,
+				"properties": {
+					"connectTimeout": "20",
+					"loginTimeout": "20",
+					"escapeSyntaxCallMode": "callIfNoReturn"
+				},
+				"provider-properties": {
+					"@dbeaver-show-non-default-db@": "false",
+					"@dbeaver-chosen-role@": "",
+					"@dbeaver-show-template-db@": "false",
+					"@dbeaver-show-unavailable-db@": "false",
+					"show-database-statistics": "false",
+					"@dbeaver-read-all-data-types-db@": "false",
+					"read-keys-with-columns": "false",
+					"replace-legacy-timezone": "false",
+					"@dbeaver-use-prepared-statements-db@": "false",
+					"postgresql.dd.plain.string": "false",
+					"postgresql.dd.tag.string": "false"
+				},
+				"auth-model": "native"
+			}
+		}
+	},
+	"connection-types": {
+		"dev": {
+			"name": "Development",
+			"color": "255,255,255",
+			"description": "Regular development database",
+			"auto-commit": true,
+			"confirm-execute": false,
+			"confirm-data-change": false,
+			"smart-commit": false,
+			"smart-commit-recover": true,
+			"auto-close-transactions": true,
+			"close-transactions-period": 1800,
+			"auto-close-connections": true,
+			"close-connections-period": 14400
+		}
+	}
+}
