@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<settings xmlns="http://maven.apache.org/SETTINGS/1.2.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.2.0 http://maven.apache.org/xsd/settings-1.2.0.xsd">
+  <localRepository>${user.home}/.m2/repository</localRepository>
+
+  <pluginGroups>
+  </pluginGroups>
+
+  <proxies>
+  </proxies>
+
+  <servers>
+    <server>
+      <id>maven-public</id>
+      <username>REPLACE_NEXUS_USERNAME</username>
+      <password>REPLACE_NEXUS_PASSWORD</password>
+    </server>
+    <server>
+      <id>maven-snapshots</id>
+      <username>REPLACE_NEXUS_USERNAME</username>
+      <password>REPLACE_NEXUS_PASSWORD</password>
+    </server>
+    <server>
+      <id>maven-releases</id>
+      <username>REPLACE_NEXUS_USERNAME</username>
+      <password>REPLACE_NEXUS_PASSWORD</password>
+    </server>
+  </servers>
+
+  <profiles>
+    <profile>
+      <id>my-repo</id>
+        <pluginRepositories>
+          <pluginRepository>
+            <id>maven-public</id>
+            <name>Spring central Repository</name>
+            <url>https://nexus.dspace.kt.co.kr/repository/maven-public/</url>
+            <snapshots>
+              <enabled>false</enabled>
+            </snapshots>
+            <releases>
+              <enabled>true</enabled>
+            </releases>
+          </pluginRepository>
+        </pluginRepositories>
+        <repositories>
+          <repository>
+            <id>maven-public</id>
+            <name>Spring central Repository</name>
+            <url>https://nexus.dspace.kt.co.kr/repository/maven-public/</url>
+            <snapshots>
+              <enabled>false</enabled>
+            </snapshots>
+            <releases>
+              <enabled>true</enabled>
+            </releases>
+          </repository>
+        </repositories>
+    </profile>
+    <profile>
+      <id>nvd-config</id>
+      <properties>
+        <nvdApiDelay>8000</nvdApiDelay>
+        <nvdApiKey>REPLACE_NVD_API_KEY</nvdApiKey>
+      </properties>
+    </profile>
+  </profiles>
+
+  <activeProfiles>
+    <activeProfile>nvd-config</activeProfile>
+  </activeProfiles>
+
+</settings>

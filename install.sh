@@ -158,6 +158,36 @@ install_ghostty() {
     echo "=== Ghostty 설치 완료! ==="
 }
 
+install_maven() {
+    echo "=== Maven 설치 시작 ==="
+
+    if ! command -v brew &>/dev/null; then
+        echo "Homebrew가 없습니다. 설치 중..."
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    fi
+
+    if ! command -v mvn &>/dev/null; then
+        echo "Maven 설치 중..."
+        brew install maven
+    else
+        echo "Maven 이미 설치되어 있습니다. ($(mvn -v 2>/dev/null | head -1))"
+    fi
+
+    # settings.xml 템플릿 복사 (없는 경우만)
+    if [ ! -f ~/.m2/settings.xml ]; then
+        echo "Maven settings.xml 템플릿 복사 중..."
+        mkdir -p ~/.m2
+        cp ~/dotfiles/maven/settings.example.xml ~/.m2/settings.xml
+        echo "⚠️  ~/.m2/settings.xml 에서 아래 항목을 실제 값으로 수정하세요:"
+        echo "    - REPLACE_NEXUS_USERNAME / REPLACE_NEXUS_PASSWORD"
+        echo "    - REPLACE_NVD_API_KEY"
+    else
+        echo "Maven settings.xml 이 이미 존재합니다. 템플릿: ~/dotfiles/maven/settings.example.xml"
+    fi
+
+    echo "=== Maven 설치 완료! ==="
+}
+
 install_dbeaver() {
     echo "=== DBeaver 설치 시작 ==="
 
@@ -243,6 +273,9 @@ case "$COMPONENT" in
     localsend)
         install_localsend
         ;;
+    maven)
+        install_maven
+        ;;
     dbeaver)
         install_dbeaver
         ;;
@@ -256,17 +289,19 @@ case "$COMPONENT" in
         install_karabiner
         install_ghostty
         install_localsend
+        install_maven
         install_dbeaver
         install_discretescroll
         ;;
     *)
-        echo "Usage: ./install.sh [zsh|vim|tmux|karabiner|ghostty|localsend|dbeaver|discretescroll|all]"
+        echo "Usage: ./install.sh [zsh|vim|tmux|karabiner|ghostty|localsend|maven|dbeaver|discretescroll|all]"
         echo "  zsh             - zsh 설정 (oh-my-zsh, powerlevel9k, bat, fasd)"
         echo "  vim             - vim 설정만 설치"
         echo "  tmux            - tmux 설정만 설치"
         echo "  karabiner       - Karabiner-Elements 설정만 설치"
         echo "  ghostty         - Ghostty 설치 및 설정"
         echo "  localsend       - LocalSend 설치"
+        echo "  maven           - Maven 설치 및 settings.xml 템플릿 적용"
         echo "  dbeaver         - DBeaver Community 설치"
         echo "  discretescroll  - DiscreteScroll 설치"
         echo "  all             - 전체 설치 (기본값)"
