@@ -87,6 +87,28 @@ install_karabiner() {
     echo "Karabiner-Elements를 재시작하면 설정이 적용됩니다."
 }
 
+install_ghostty() {
+    echo "=== Ghostty 설치 시작 ==="
+
+    if ! command -v brew &>/dev/null; then
+        echo "Homebrew가 없습니다. 설치 중..."
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    fi
+
+    if ! brew list --cask ghostty &>/dev/null; then
+        echo "Ghostty 설치 중..."
+        brew install --cask ghostty
+    else
+        echo "Ghostty 이미 설치되어 있습니다."
+    fi
+
+    echo "심볼릭 링크 생성 중..."
+    mkdir -p ~/.config/ghostty
+    ln -sf ~/dotfiles/ghostty/config ~/.config/ghostty/config
+
+    echo "=== Ghostty 설치 완료! ==="
+}
+
 install_discretescroll() {
     echo "=== DiscreteScroll 설치 시작 ==="
 
@@ -116,6 +138,9 @@ case "$COMPONENT" in
     karabiner)
         install_karabiner
         ;;
+    ghostty)
+        install_ghostty
+        ;;
     discretescroll)
         install_discretescroll
         ;;
@@ -123,13 +148,15 @@ case "$COMPONENT" in
         install_vim
         install_tmux
         install_karabiner
+        install_ghostty
         install_discretescroll
         ;;
     *)
-        echo "Usage: ./install.sh [vim|tmux|karabiner|discretescroll|all]"
+        echo "Usage: ./install.sh [vim|tmux|karabiner|ghostty|discretescroll|all]"
         echo "  vim             - vim 설정만 설치"
         echo "  tmux            - tmux 설정만 설치"
         echo "  karabiner       - Karabiner-Elements 설정만 설치"
+        echo "  ghostty         - Ghostty 설치 및 설정"
         echo "  discretescroll  - DiscreteScroll 설치"
         echo "  all             - 전체 설치 (기본값)"
         exit 1
