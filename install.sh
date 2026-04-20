@@ -159,22 +159,34 @@ install_ghostty() {
 }
 
 install_claude() {
-    echo "=== Claude Code 설치 시작 ==="
+    echo "=== Claude 설치 시작 ==="
 
-    if ! command -v node &>/dev/null; then
-        echo "Node.js가 없습니다. NVM을 먼저 설치하거나 ~/.zshrc.local 에서 NVM을 활성화하세요."
-        exit 1
+    if ! command -v brew &>/dev/null; then
+        echo "Homebrew가 없습니다. 설치 중..."
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     fi
 
-    if npm list -g --depth=0 2>/dev/null | grep -q "@anthropic-ai/claude-code"; then
-        echo "Claude Code 업데이트 중..."
+    # Claude 데스크탑 앱
+    if ! brew list --cask claude &>/dev/null; then
+        echo "Claude 데스크탑 앱 설치 중..."
+        brew install --cask claude
+    else
+        echo "Claude 데스크탑 앱 이미 설치되어 있습니다."
+    fi
+
+    # Claude Code CLI
+    if ! command -v node &>/dev/null; then
+        echo "Node.js가 없습니다. NVM을 먼저 설치하거나 ~/.zshrc.local 에서 NVM을 활성화하세요."
+        echo "Claude Code CLI 설치를 건너뜁니다."
+    elif npm list -g --depth=0 2>/dev/null | grep -q "@anthropic-ai/claude-code"; then
+        echo "Claude Code CLI 업데이트 중..."
         npm update -g @anthropic-ai/claude-code
     else
-        echo "Claude Code 설치 중..."
+        echo "Claude Code CLI 설치 중..."
         npm install -g @anthropic-ai/claude-code
     fi
 
-    echo "=== Claude Code 설치 완료! ($(claude --version 2>/dev/null)) ==="
+    echo "=== Claude 설치 완료! ==="
 }
 
 install_java() {
