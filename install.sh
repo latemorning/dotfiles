@@ -109,6 +109,24 @@ install_ghostty() {
     echo "=== Ghostty 설치 완료! ==="
 }
 
+install_localsend() {
+    echo "=== LocalSend 설치 시작 ==="
+
+    if ! command -v brew &>/dev/null; then
+        echo "Homebrew가 없습니다. 설치 중..."
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    fi
+
+    if ! brew list --cask localsend &>/dev/null; then
+        echo "LocalSend 설치 중..."
+        brew install --cask localsend
+    else
+        echo "LocalSend 이미 설치되어 있습니다."
+    fi
+
+    echo "=== LocalSend 설치 완료! ==="
+}
+
 install_discretescroll() {
     echo "=== DiscreteScroll 설치 시작 ==="
 
@@ -141,6 +159,9 @@ case "$COMPONENT" in
     ghostty)
         install_ghostty
         ;;
+    localsend)
+        install_localsend
+        ;;
     discretescroll)
         install_discretescroll
         ;;
@@ -149,14 +170,16 @@ case "$COMPONENT" in
         install_tmux
         install_karabiner
         install_ghostty
+        install_localsend
         install_discretescroll
         ;;
     *)
-        echo "Usage: ./install.sh [vim|tmux|karabiner|ghostty|discretescroll|all]"
+        echo "Usage: ./install.sh [vim|tmux|karabiner|ghostty|localsend|discretescroll|all]"
         echo "  vim             - vim 설정만 설치"
         echo "  tmux            - tmux 설정만 설치"
         echo "  karabiner       - Karabiner-Elements 설정만 설치"
         echo "  ghostty         - Ghostty 설치 및 설정"
+        echo "  localsend       - LocalSend 설치"
         echo "  discretescroll  - DiscreteScroll 설치"
         echo "  all             - 전체 설치 (기본값)"
         exit 1
