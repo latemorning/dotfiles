@@ -204,6 +204,61 @@ install_vscode() {
         echo "Visual Studio Code 이미 설치되어 있습니다."
     fi
 
+    echo "VSCode 확장 설치 중..."
+    extensions=(
+        # AI
+        anthropic.claude-code
+        continue.continue
+        kilocode.kilo-code
+
+        # Java / Spring
+        redhat.java
+        oracle.oracle-java
+        vscjava.vscode-java-pack
+        vscjava.vscode-java-debug
+        vscjava.vscode-java-test
+        vscjava.vscode-java-dependency
+        vscjava.vscode-java-upgrade
+        vscjava.vscode-maven
+        vscjava.vscode-gradle
+        vscjava.vscode-spring-boot-dashboard
+        vscjava.vscode-spring-initializr
+        vmware.vscode-boot-dev-pack
+        vmware.vscode-spring-boot
+
+        # Python
+        ms-python.python
+        ms-python.debugpy
+        ms-python.vscode-pylance
+        ms-python.vscode-python-envs
+
+        # Remote / Container
+        ms-vscode-remote.remote-ssh
+        ms-vscode-remote.remote-ssh-edit
+        ms-vscode-remote.remote-containers
+        ms-vscode.remote-explorer
+        ms-azuretools.vscode-containers
+
+        # DB
+        cweijan.vscode-database-client2
+        cweijan.dbclient-jdbc
+
+        # 편의
+        eamodio.gitlens
+        humao.rest-client
+        vscodevim.vim
+        k--kato.intellij-idea-keybindings
+        mechatroner.rainbow-csv
+        bierner.markdown-mermaid
+        yzhang.markdown-all-in-one
+        ms-ceintl.vscode-language-pack-ko
+    )
+
+    for ext in "${extensions[@]}"; do
+        [[ "$ext" == \#* ]] && continue
+        code --install-extension "$ext" --force 2>/dev/null
+    done
+
     echo "=== Visual Studio Code 설치 완료! ==="
 }
 
