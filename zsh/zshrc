@@ -1,0 +1,30 @@
+export ZSH="$HOME/.oh-my-zsh"
+
+ZSH_THEME="powerlevel9k/powerlevel9k"
+
+plugins=(
+    git
+    fzf
+    fasd
+)
+
+source $ZSH/oh-my-zsh.sh
+
+# Homebrew
+eval "$(/opt/homebrew/bin/brew shellenv)"
+eval "$(/usr/libexec/path_helper)"
+
+# Powerlevel9k
+POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context dir vcs)
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status)
+
+# Vi mode
+set -o vi
+
+# Aliases
+alias cat="bat"
+alias emv="vim ~/.vim_runtime/my_configs.vim"
+alias emz="vim ~/.zshrc"
+
+# 머신별 설정
+[[ -f ~/.zshrc.local ]] && source ~/.zshrc.local

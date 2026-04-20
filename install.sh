@@ -2,6 +2,55 @@
 
 COMPONENT=${1:-all}
 
+install_zsh() {
+    echo "=== zsh 설정 시작 ==="
+
+    if ! command -v brew &>/dev/null; then
+        echo "Homebrew가 없습니다. 설치 중..."
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    fi
+
+    # oh-my-zsh 설치
+    if [ ! -d "$HOME/.oh-my-zsh" ]; then
+        echo "oh-my-zsh 설치 중..."
+        RUNZSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    fi
+
+    # powerlevel9k 설치
+    if [ ! -d "$HOME/.oh-my-zsh/custom/themes/powerlevel9k" ]; then
+        echo "powerlevel9k 테마 설치 중..."
+        git clone https://github.com/Powerlevel9k/powerlevel9k.git \
+            "$HOME/.oh-my-zsh/custom/themes/powerlevel9k"
+    fi
+
+    # fasd 설치
+    if ! command -v fasd &>/dev/null; then
+        echo "fasd 설치 중..."
+        brew install fasd
+    fi
+
+    # bat 설치 (cat alias 대체)
+    if ! command -v bat &>/dev/null; then
+        echo "bat 설치 중..."
+        brew install bat
+    fi
+
+    # 심볼릭 링크 생성
+    echo "심볼릭 링크 생성 중..."
+    ln -sf ~/dotfiles/zsh/zshrc ~/.zshrc
+    ln -sf ~/dotfiles/zsh/zprofile ~/.zprofile
+
+    # 머신별 설정 파일 생성 (없는 경우만)
+    if [ ! -f ~/.zshrc.local ]; then
+        echo "~/.zshrc.local 템플릿 복사 중..."
+        cp ~/dotfiles/zsh/local.zsh.example ~/.zshrc.local
+        echo "~/.zshrc.local 을 환경에 맞게 수정하세요."
+    fi
+
+    echo "=== zsh 설정 완료! ==="
+    echo "터미널을 재시작하거나 'source ~/.zshrc' 를 실행하세요."
+}
+
 install_vim() {
     echo "=== vim 설치 시작 ==="
 
@@ -147,6 +196,9 @@ install_discretescroll() {
 }
 
 case "$COMPONENT" in
+    zsh)
+        install_zsh
+        ;;
     vim)
         install_vim
         ;;
@@ -166,6 +218,7 @@ case "$COMPONENT" in
         install_discretescroll
         ;;
     all)
+        install_zsh
         install_vim
         install_tmux
         install_karabiner
@@ -174,7 +227,8 @@ case "$COMPONENT" in
         install_discretescroll
         ;;
     *)
-        echo "Usage: ./install.sh [vim|tmux|karabiner|ghostty|localsend|discretescroll|all]"
+        echo "Usage: ./install.sh [zsh|vim|tmux|karabiner|ghostty|localsend|discretescroll|all]"
+        echo "  zsh             - zsh 설정 (oh-my-zsh, powerlevel9k, bat, fasd)"
         echo "  vim             - vim 설정만 설치"
         echo "  tmux            - tmux 설정만 설치"
         echo "  karabiner       - Karabiner-Elements 설정만 설치"

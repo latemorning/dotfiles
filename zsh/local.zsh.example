@@ -1,0 +1,39 @@
+# ~/.zshrc.local - 머신별 설정 (git 미추적)
+# 이 파일을 ~/.zshrc.local 로 복사 후 환경에 맞게 수정하세요
+
+# FZF
+export FZF_BASE="/opt/homebrew/Cellar/fzf/0.29.0"
+
+# Java
+export JAVA_HOME_8=$(/usr/libexec/java_home -v8 2>/dev/null)
+export JAVA_HOME_11=$(/usr/libexec/java_home -v11 2>/dev/null)
+export JAVA_HOME_17=$(/usr/libexec/java_home -v17 2>/dev/null)
+export JAVA_HOME_21=$(/usr/libexec/java_home -v21 2>/dev/null)
+export JAVA_HOME=$JAVA_HOME_21
+
+# Vim runtime
+export VIM="/usr/share/vim"
+export VIMRUNTIME="/usr/share/vim/vim91"
+
+# Graphviz
+export GRAPHVIZ_DOT="/opt/homebrew/opt/graphviz/bin/dot"
+
+# PostgreSQL
+export PATH="/opt/homebrew/opt/postgresql@17/bin:$PATH"
+
+# libpq
+export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
+
+# NVM
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
+# uv
+[ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
+
+# Rancher Desktop
+# export PATH="$HOME/.rd/bin:$PATH"
+
+# 프로젝트별 alias
+# alias gdn="cd ~/path/to/project"
