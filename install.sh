@@ -158,6 +158,25 @@ install_ghostty() {
     echo "=== Ghostty 설치 완료! ==="
 }
 
+install_claude() {
+    echo "=== Claude Code 설치 시작 ==="
+
+    if ! command -v node &>/dev/null; then
+        echo "Node.js가 없습니다. NVM을 먼저 설치하거나 ~/.zshrc.local 에서 NVM을 활성화하세요."
+        exit 1
+    fi
+
+    if npm list -g --depth=0 2>/dev/null | grep -q "@anthropic-ai/claude-code"; then
+        echo "Claude Code 업데이트 중..."
+        npm update -g @anthropic-ai/claude-code
+    else
+        echo "Claude Code 설치 중..."
+        npm install -g @anthropic-ai/claude-code
+    fi
+
+    echo "=== Claude Code 설치 완료! ($(claude --version 2>/dev/null)) ==="
+}
+
 install_java() {
     echo "=== Java 설치 시작 ==="
 
@@ -301,6 +320,9 @@ case "$COMPONENT" in
     localsend)
         install_localsend
         ;;
+    claude)
+        install_claude
+        ;;
     java)
         install_java
         ;;
@@ -315,6 +337,7 @@ case "$COMPONENT" in
         ;;
     all)
         install_zsh
+        install_claude
         install_java
         install_vim
         install_tmux
@@ -326,13 +349,14 @@ case "$COMPONENT" in
         install_discretescroll
         ;;
     *)
-        echo "Usage: ./install.sh [zsh|vim|tmux|karabiner|ghostty|localsend|java|maven|dbeaver|discretescroll|all]"
+        echo "Usage: ./install.sh [zsh|vim|tmux|karabiner|ghostty|localsend|claude|java|maven|dbeaver|discretescroll|all]"
         echo "  zsh             - zsh 설정 (oh-my-zsh, powerlevel9k, bat, fasd)"
         echo "  vim             - vim 설정만 설치"
         echo "  tmux            - tmux 설정만 설치"
         echo "  karabiner       - Karabiner-Elements 설정만 설치"
         echo "  ghostty         - Ghostty 설치 및 설정"
         echo "  localsend       - LocalSend 설치"
+        echo "  claude          - Claude Code CLI 설치/업데이트"
         echo "  java            - Amazon Corretto 17, 21 설치"
         echo "  maven           - Maven 설치 및 settings.xml 템플릿 적용"
         echo "  dbeaver         - DBeaver Community 설치"
