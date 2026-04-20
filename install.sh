@@ -189,6 +189,24 @@ install_claude() {
     echo "=== Claude 설치 완료! ==="
 }
 
+install_vscode() {
+    echo "=== Visual Studio Code 설치 시작 ==="
+
+    if ! command -v brew &>/dev/null; then
+        echo "Homebrew가 없습니다. 설치 중..."
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    fi
+
+    if ! brew list --cask visual-studio-code &>/dev/null; then
+        echo "Visual Studio Code 설치 중..."
+        brew install --cask visual-studio-code
+    else
+        echo "Visual Studio Code 이미 설치되어 있습니다."
+    fi
+
+    echo "=== Visual Studio Code 설치 완료! ==="
+}
+
 install_java() {
     echo "=== Java 설치 시작 ==="
 
@@ -335,6 +353,9 @@ case "$COMPONENT" in
     claude)
         install_claude
         ;;
+    vscode)
+        install_vscode
+        ;;
     java)
         install_java
         ;;
@@ -350,6 +371,7 @@ case "$COMPONENT" in
     all)
         install_zsh
         install_claude
+        install_vscode
         install_java
         install_vim
         install_tmux
@@ -361,7 +383,7 @@ case "$COMPONENT" in
         install_discretescroll
         ;;
     *)
-        echo "Usage: ./install.sh [zsh|vim|tmux|karabiner|ghostty|localsend|claude|java|maven|dbeaver|discretescroll|all]"
+        echo "Usage: ./install.sh [zsh|vim|tmux|karabiner|ghostty|localsend|claude|vscode|java|maven|dbeaver|discretescroll|all]"
         echo "  zsh             - zsh 설정 (oh-my-zsh, powerlevel9k, bat, fasd)"
         echo "  vim             - vim 설정만 설치"
         echo "  tmux            - tmux 설정만 설치"
@@ -369,6 +391,7 @@ case "$COMPONENT" in
         echo "  ghostty         - Ghostty 설치 및 설정"
         echo "  localsend       - LocalSend 설치"
         echo "  claude          - Claude Code CLI 설치/업데이트"
+        echo "  vscode          - Visual Studio Code 설치"
         echo "  java            - Amazon Corretto 17, 21 설치"
         echo "  maven           - Maven 설치 및 settings.xml 템플릿 적용"
         echo "  dbeaver         - DBeaver Community 설치"
