@@ -210,6 +210,9 @@ install_vscode() {
         anthropic.claude-code
         continue.continue
         kilocode.kilo-code
+        google.geminicodeassist
+        google.gemini-cli-vscode-ide-companion
+        cosmowifi.gemini-code-assistant-korean-cosmowifi
 
         # Java / Spring
         redhat.java
@@ -219,6 +222,7 @@ install_vscode() {
         vscjava.vscode-java-test
         vscjava.vscode-java-dependency
         vscjava.vscode-java-upgrade
+        vscjava.migrate-java-to-azure
         vscjava.vscode-maven
         vscjava.vscode-gradle
         vscjava.vscode-spring-boot-dashboard
