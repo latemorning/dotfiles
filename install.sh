@@ -64,6 +64,48 @@ install_tmux() {
     echo "tmux 실행 후 Prefix + I 를 눌러 나머지 플러그인을 설치하세요."
 }
 
+install_karabiner() {
+    echo "=== Karabiner-Elements 설치 시작 ==="
+
+    if ! command -v brew &>/dev/null; then
+        echo "Homebrew가 없습니다. 설치 중..."
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    fi
+
+    if ! brew list --cask karabiner-elements &>/dev/null; then
+        echo "Karabiner-Elements 설치 중..."
+        brew install --cask karabiner-elements
+    else
+        echo "Karabiner-Elements 이미 설치되어 있습니다."
+    fi
+
+    echo "심볼릭 링크 생성 중..."
+    mkdir -p ~/.config/karabiner
+    ln -sf ~/dotfiles/karabiner/karabiner.json ~/.config/karabiner/karabiner.json
+
+    echo "=== Karabiner-Elements 설치 완료! ==="
+    echo "Karabiner-Elements를 재시작하면 설정이 적용됩니다."
+}
+
+install_discretescroll() {
+    echo "=== DiscreteScroll 설치 시작 ==="
+
+    if ! command -v brew &>/dev/null; then
+        echo "Homebrew가 없습니다. 설치 중..."
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    fi
+
+    if ! brew list --cask discretescroll &>/dev/null; then
+        echo "DiscreteScroll 설치 중..."
+        brew install --cask discretescroll
+    else
+        echo "DiscreteScroll 이미 설치되어 있습니다."
+    fi
+
+    echo "=== DiscreteScroll 설치 완료! ==="
+    echo "시스템 환경설정 > 개인 정보 보호 및 보안 > 손쉬운 사용에서 DiscreteScroll 권한을 허용하세요."
+}
+
 case "$COMPONENT" in
     vim)
         install_vim
@@ -71,15 +113,25 @@ case "$COMPONENT" in
     tmux)
         install_tmux
         ;;
+    karabiner)
+        install_karabiner
+        ;;
+    discretescroll)
+        install_discretescroll
+        ;;
     all)
         install_vim
         install_tmux
+        install_karabiner
+        install_discretescroll
         ;;
     *)
-        echo "Usage: ./install.sh [vim|tmux|all]"
-        echo "  vim   - vim 설정만 설치"
-        echo "  tmux  - tmux 설정만 설치"
-        echo "  all   - 전체 설치 (기본값)"
+        echo "Usage: ./install.sh [vim|tmux|karabiner|discretescroll|all]"
+        echo "  vim             - vim 설정만 설치"
+        echo "  tmux            - tmux 설정만 설치"
+        echo "  karabiner       - Karabiner-Elements 설정만 설치"
+        echo "  discretescroll  - DiscreteScroll 설치"
+        echo "  all             - 전체 설치 (기본값)"
         exit 1
         ;;
 esac
