@@ -189,6 +189,75 @@ install_claude() {
     echo "=== Claude 설치 완료! ==="
 }
 
+install_obsidian() {
+    echo "=== Obsidian 설치 시작 ==="
+
+    if ! command -v brew &>/dev/null; then
+        echo "Homebrew가 없습니다. 설치 중..."
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    fi
+
+    if ! brew list --cask obsidian &>/dev/null; then
+        echo "Obsidian 설치 중..."
+        brew install --cask obsidian
+    else
+        echo "Obsidian 이미 설치되어 있습니다."
+    fi
+
+    # vault 경로 설정
+    VAULT_DIR="$HOME/obsidianVaults/my_vault"
+    OBSIDIAN_CONFIG="$VAULT_DIR/.obsidian"
+    DOTFILES_OBSIDIAN="$HOME/dotfiles/obsidian/my_vault"
+
+    if [ ! -d "$VAULT_DIR" ]; then
+        echo "Vault 디렉토리 생성 중: $VAULT_DIR"
+        mkdir -p "$VAULT_DIR"
+    fi
+
+    echo "Obsidian 설정 파일 복사 중..."
+    mkdir -p "$OBSIDIAN_CONFIG/plugins"
+    for f in app.json appearance.json community-plugins.json core-plugins.json graph.json types.json; do
+        [ -f "$DOTFILES_OBSIDIAN/$f" ] && cp "$DOTFILES_OBSIDIAN/$f" "$OBSIDIAN_CONFIG/$f"
+    done
+
+    # 커뮤니티 플러그인 목록 다운로드 (repo 조회용)
+    echo "플러그인 설치 중..."
+    COMMUNITY_JSON=$(curl -s "https://raw.githubusercontent.com/obsidianmd/obsidian-releases/master/community-plugins.json")
+
+    for plugin_dir in "$DOTFILES_OBSIDIAN/plugins"/*/; do
+        plugin_id=$(basename "$plugin_dir")
+        target="$OBSIDIAN_CONFIG/plugins/$plugin_id"
+        mkdir -p "$target"
+
+        # 설정 파일 복사
+        [ -f "$plugin_dir/manifest.json" ] && cp "$plugin_dir/manifest.json" "$target/"
+        [ -f "$plugin_dir/data.json" ]     && cp "$plugin_dir/data.json" "$target/"
+
+        # GitHub repo 조회 후 main.js 다운로드
+        repo=$(echo "$COMMUNITY_JSON" | python3 -c "
+import json, sys
+plugins = json.load(sys.stdin)
+for p in plugins:
+    if p.get('id') == '$plugin_id':
+        print(p.get('repo', ''))
+        break
+" 2>/dev/null)
+
+        if [ -n "$repo" ]; then
+            version=$(python3 -c "import json; print(json.load(open('$target/manifest.json'))['version'])" 2>/dev/null)
+            base_url="https://github.com/$repo/releases/download/$version"
+            echo "  [$plugin_id] $version 다운로드 중..."
+            curl -sL "$base_url/main.js" -o "$target/main.js"
+            curl -sL "$base_url/styles.css" -o "$target/styles.css" 2>/dev/null || rm -f "$target/styles.css"
+        else
+            echo "  [$plugin_id] 커뮤니티 목록에서 repo를 찾을 수 없습니다. 수동 설치 필요."
+        fi
+    done
+
+    echo "=== Obsidian 설치 완료! ==="
+    echo "Obsidian 실행 후 vault 경로를 '$VAULT_DIR' 로 열어주세요."
+}
+
 install_vscode() {
     echo "=== Visual Studio Code 설치 시작 ==="
 
@@ -412,6 +481,9 @@ case "$COMPONENT" in
     claude)
         install_claude
         ;;
+    obsidian)
+        install_obsidian
+        ;;
     vscode)
         install_vscode
         ;;
@@ -430,6 +502,7 @@ case "$COMPONENT" in
     all)
         install_zsh
         install_claude
+        install_obsidian
         install_vscode
         install_java
         install_vim
@@ -442,7 +515,7 @@ case "$COMPONENT" in
         install_discretescroll
         ;;
     *)
-        echo "Usage: ./install.sh [zsh|vim|tmux|karabiner|ghostty|localsend|claude|vscode|java|maven|dbeaver|discretescroll|all]"
+        echo "Usage: ./install.sh [zsh|vim|tmux|karabiner|ghostty|localsend|claude|obsidian|vscode|java|maven|dbeaver|discretescroll|all]"
         echo "  zsh             - zsh 설정 (oh-my-zsh, powerlevel9k, bat, fasd)"
         echo "  vim             - vim 설정만 설치"
         echo "  tmux            - tmux 설정만 설치"
@@ -450,6 +523,7 @@ case "$COMPONENT" in
         echo "  ghostty         - Ghostty 설치 및 설정"
         echo "  localsend       - LocalSend 설치"
         echo "  claude          - Claude Code CLI 설치/업데이트"
+        echo "  obsidian        - Obsidian 설치 및 플러그인/설정 적용"
         echo "  vscode          - Visual Studio Code 설치"
         echo "  java            - Amazon Corretto 17, 21 설치"
         echo "  maven           - Maven 설치 및 settings.xml 템플릿 적용"
