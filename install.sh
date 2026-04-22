@@ -151,6 +151,15 @@ install_ghostty() {
         echo "Ghostty 이미 설치되어 있습니다."
     fi
 
+    # D2Coding 폰트 설치
+    if ! fc-list 2>/dev/null | grep -qi "D2Coding" && \
+       ! ls ~/Library/Fonts/ 2>/dev/null | grep -qi "D2Coding"; then
+        echo "D2Coding 폰트 설치 중..."
+        brew install --cask font-d2coding
+    else
+        echo "D2Coding 폰트 이미 설치되어 있습니다."
+    fi
+
     echo "심볼릭 링크 생성 중..."
     mkdir -p ~/.config/ghostty
     ln -sf ~/dotfiles/ghostty/config ~/.config/ghostty/config
