@@ -468,6 +468,32 @@ install_discretescroll() {
     echo "시스템 환경설정 > 개인 정보 보호 및 보안 > 손쉬운 사용에서 DiscreteScroll 권한을 허용하세요."
 }
 
+install_1password() {
+    echo "=== 1Password 설치 시작 ==="
+
+    if ! command -v brew &>/dev/null; then
+        echo "Homebrew가 없습니다. 설치 중..."
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    fi
+
+    if ! brew list --cask 1password &>/dev/null; then
+        echo "1Password 설치 중..."
+        brew install --cask 1password
+    else
+        echo "1Password 이미 설치되어 있습니다."
+    fi
+
+    if ! brew list --cask 1password-cli &>/dev/null; then
+        echo "1Password CLI 설치 중..."
+        brew install --cask 1password-cli
+    else
+        echo "1Password CLI 이미 설치되어 있습니다."
+    fi
+
+    echo "=== 1Password 설치 완료! ==="
+    echo "1Password 앱에서 설정 > 개발자 > CLI와 통합을 활성화하세요."
+}
+
 case "$COMPONENT" in
     zsh)
         install_zsh
@@ -508,6 +534,9 @@ case "$COMPONENT" in
     discretescroll)
         install_discretescroll
         ;;
+    1password)
+        install_1password
+        ;;
     all)
         install_zsh
         install_claude
@@ -522,9 +551,10 @@ case "$COMPONENT" in
         install_maven
         install_dbeaver
         install_discretescroll
+        install_1password
         ;;
     *)
-        echo "Usage: ./install.sh [zsh|vim|tmux|karabiner|ghostty|localsend|claude|obsidian|vscode|java|maven|dbeaver|discretescroll|all]"
+        echo "Usage: ./install.sh [zsh|vim|tmux|karabiner|ghostty|localsend|claude|obsidian|vscode|java|maven|dbeaver|discretescroll|1password|all]"
         echo "  zsh             - zsh 설정 (oh-my-zsh, powerlevel9k, bat, fasd)"
         echo "  vim             - vim 설정만 설치"
         echo "  tmux            - tmux 설정만 설치"
@@ -538,6 +568,7 @@ case "$COMPONENT" in
         echo "  maven           - Maven 설치 및 settings.xml 템플릿 적용"
         echo "  dbeaver         - DBeaver Community 설치"
         echo "  discretescroll  - DiscreteScroll 설치"
+        echo "  1password       - 1Password 및 1Password CLI 설치"
         echo "  all             - 전체 설치 (기본값)"
         exit 1
         ;;
