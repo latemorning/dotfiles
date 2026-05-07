@@ -52,3 +52,33 @@ au CursorHold,CursorHoldI * checktime
 " 3. 파일이 자동으로 로드될 때 알림 메시지 출력 (선택 사항)
 au FileChangedShellPost * echohl WarningMsg | echo "파일이 외부에서 변경되어 새로고침되었습니다!(" . strftime("%H:%M:%S") . ")" | echohl None
 
+" insert mode에서 ESC를 누른 직후 ESC를 한 번 더 누르면 macOS 입력 소스를 ABC로 전환
+if has('macunix') && executable('/Users/KTH/.local/bin/select-input-source')
+  let g:select_english_after_insert_escape_window = 0.7
+
+  function! s:RememberInsertEscapeForInputSource() abort
+    let g:select_english_after_insert_escape_at = reltime()
+    return "\<Esc>"
+  endfunction
+
+  function! s:SelectEnglishInputSource() abort
+    let l:uid = matchstr(system('id -u'), '\d\+')
+    if empty(l:uid)
+      call system('/Users/KTH/.local/bin/select-input-source com.apple.keylayout.ABC >/dev/null 2>&1')
+    else
+      call system('launchctl asuser ' . l:uid . ' /Users/KTH/.local/bin/select-input-source com.apple.keylayout.ABC >/dev/null 2>&1')
+    endif
+  endfunction
+
+  function! s:SelectEnglishOnSecondEscape() abort
+    if exists('g:select_english_after_insert_escape_at')
+      if reltimefloat(reltime(g:select_english_after_insert_escape_at)) <= g:select_english_after_insert_escape_window
+        silent! call <SID>SelectEnglishInputSource()
+      endif
+      unlet g:select_english_after_insert_escape_at
+    endif
+  endfunction
+
+  inoremap <expr> <Esc> <SID>RememberInsertEscapeForInputSource()
+  nnoremap <silent> <Esc> :<C-u>call <SID>SelectEnglishOnSecondEscape()<CR>
+endif

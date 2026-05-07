@@ -1,7 +1,28 @@
 {
     "profiles": [
         {
-            "complex_modifications": { "parameters": { "basic.to_if_alone_timeout_milliseconds": 500 } },
+            "complex_modifications": {
+                "parameters": { "basic.to_if_alone_timeout_milliseconds": 500 },
+                "rules": [
+                    {
+                        "description": "Switch input source to ABC when pressing Escape",
+                        "manipulators": [
+                            {
+                                "from": { "key_code": "escape" },
+                                "to": [
+                                    { "key_code": "escape" },
+                                    {
+                                        "select_input_source": {
+                                            "input_source_id": "^com\\.apple\\.keylayout\\.ABC$"
+                                        }
+                                    }
+                                ],
+                                "type": "basic"
+                            }
+                        ]
+                    }
+                ]
+            },
             "devices": [
                 {
                     "identifiers": {
