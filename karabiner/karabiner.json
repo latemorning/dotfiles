@@ -5,9 +5,15 @@
                 "parameters": { "basic.to_if_alone_timeout_milliseconds": 500 },
                 "rules": [
                     {
-                        "description": "Switch input source to ABC when pressing Escape",
+                        "description": "Switch input source to ABC when pressing Escape twice",
                         "manipulators": [
                             {
+                                "conditions": [
+                                    {
+                                        "expression": "escape_to_abc_expiration > system.now.milliseconds",
+                                        "type": "expression_if"
+                                    }
+                                ],
                                 "from": { "key_code": "escape" },
                                 "to": [
                                     { "key_code": "escape" },
@@ -15,7 +21,26 @@
                                         "select_input_source": {
                                             "input_source_id": "^com\\.apple\\.keylayout\\.ABC$"
                                         }
+                                    },
+                                    {
+                                        "set_variable": {
+                                            "name": "escape_to_abc_expiration",
+                                            "value": 0
+                                        }
                                     }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "from": { "key_code": "escape" },
+                                "to": [
+                                    {
+                                        "set_variable": {
+                                            "expression": "system.now.milliseconds + 300",
+                                            "name": "escape_to_abc_expiration"
+                                        }
+                                    },
+                                    { "key_code": "escape" }
                                 ],
                                 "type": "basic"
                             }
