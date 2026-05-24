@@ -4,12 +4,12 @@
 
 이 저장소는 macOS 개발 환경을 재현하기 위한 개인 dotfiles 저장소입니다. 핵심 진입점은 `install.sh`이며, Homebrew 기반 설치, 외부 도구 설치, 설정 파일 심볼릭 링크, 템플릿 복사를 컴포넌트별로 수행합니다.
 
-주요 대상은 zsh, Vim, tmux, Karabiner-Elements, Ghostty, Claude, Obsidian, Visual Studio Code, Java, Maven, DBeaver, LocalSend, DiscreteScroll, 1Password입니다.
+주요 대상은 zsh, Vim, tmux, Karabiner-Elements, Ghostty, Claude, Obsidian, Visual Studio Code, IntelliJ IDEA Ultimate, Java, Maven, DBeaver, LocalSend, DiscreteScroll, 1Password입니다.
 
 ## 실행 방식
 
 - 전체 설치: `./install.sh` 또는 `./install.sh all`
-- 개별 설치: `./install.sh zsh|vim|tmux|karabiner|ghostty|localsend|claude|obsidian|vscode|java|maven|dbeaver|discretescroll|1password`
+- 개별 설치: `./install.sh zsh|vim|tmux|karabiner|ghostty|localsend|claude|obsidian|vscode|intellij|java|maven|dbeaver|discretescroll|1password`
 - 설치 스크립트는 Homebrew 설치 확인, 패키지 설치, GitHub clone, curl 다운로드, 심볼릭 링크 생성, 템플릿 복사를 수행합니다.
 - `all`은 여러 앱과 CLI를 설치하므로, 에이전트가 임의로 실행하기 전에 사용자 확인이 필요합니다.
 
@@ -63,6 +63,12 @@
 - Maven은 Homebrew로 설치하고 `~/.m2/settings.xml`이 없을 때 템플릿을 복사합니다.
 - Maven 템플릿에는 Nexus credential placeholder와 NVD API key placeholder가 있습니다.
 - DBeaver는 Community edition을 설치하고 PostgreSQL 접속 템플릿을 복사합니다.
+
+### IntelliJ IDEA
+
+- IntelliJ IDEA Ultimate는 `2025.1.7.1` 버전을 고정 설치합니다.
+- Apple Silicon은 `ideaIU-2025.1.7.1-aarch64.dmg`, Intel Mac은 `ideaIU-2025.1.7.1.dmg`를 사용합니다.
+- 설치 경로는 `/Applications/IntelliJ IDEA Ultimate 2025.1.7.1.app`이며, `~/.local/bin/idea`를 해당 버전에 연결합니다.
 
 ## 민감 정보와 로컬 파일
 

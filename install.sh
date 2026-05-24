@@ -352,6 +352,96 @@ install_vscode() {
     echo "=== Visual Studio Code 설치 완료! ==="
 }
 
+install_intellij() {
+    echo "=== IntelliJ IDEA Ultimate 설치 시작 ==="
+
+    INTELLIJ_VERSION="2025.1.7.1"
+    INTELLIJ_APP_NAME="IntelliJ IDEA Ultimate ${INTELLIJ_VERSION}.app"
+    INTELLIJ_APP_PATH="/Applications/${INTELLIJ_APP_NAME}"
+    INTELLIJ_LAUNCHER="$HOME/.local/bin/idea"
+
+    if [ -d "$INTELLIJ_APP_PATH" ]; then
+        installed_version=$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" \
+            "$INTELLIJ_APP_PATH/Contents/Info.plist" 2>/dev/null || true)
+
+        if [ "$installed_version" = "$INTELLIJ_VERSION" ]; then
+            echo "IntelliJ IDEA Ultimate $INTELLIJ_VERSION 이미 설치되어 있습니다."
+            mkdir -p "$HOME/.local/bin"
+            ln -sf "$INTELLIJ_APP_PATH/Contents/MacOS/idea" "$INTELLIJ_LAUNCHER"
+            echo "CLI launcher: $INTELLIJ_LAUNCHER"
+            echo "=== IntelliJ IDEA Ultimate 설치 완료! ==="
+            return
+        fi
+
+        echo "$INTELLIJ_APP_PATH 에 다른 버전($installed_version)이 있어 다시 설치합니다."
+        rm -rf "$INTELLIJ_APP_PATH"
+    fi
+
+    case "$(uname -m)" in
+        arm64)
+            intellij_dmg="ideaIU-${INTELLIJ_VERSION}-aarch64.dmg"
+            ;;
+        x86_64)
+            intellij_dmg="ideaIU-${INTELLIJ_VERSION}.dmg"
+            ;;
+        *)
+            echo "지원하지 않는 아키텍처입니다: $(uname -m)"
+            return 1
+            ;;
+    esac
+
+    intellij_url="https://download.jetbrains.com/idea/${intellij_dmg}"
+    tmp_dir=$(mktemp -d)
+    mount_dir="$tmp_dir/mount"
+    dmg_path="$tmp_dir/$intellij_dmg"
+    mounted=0
+
+    cleanup_intellij_install() {
+        if [ "$mounted" -eq 1 ]; then
+            hdiutil detach "$mount_dir" -quiet 2>/dev/null || true
+        fi
+        rm -rf "$tmp_dir"
+    }
+
+    mkdir -p "$mount_dir"
+    echo "IntelliJ IDEA Ultimate $INTELLIJ_VERSION 다운로드 중..."
+    if ! curl -fL "$intellij_url" -o "$dmg_path"; then
+        echo "IntelliJ IDEA 다운로드에 실패했습니다: $intellij_url"
+        cleanup_intellij_install
+        return 1
+    fi
+
+    echo "DMG 마운트 중..."
+    if ! hdiutil attach "$dmg_path" -mountpoint "$mount_dir" -nobrowse -quiet; then
+        echo "IntelliJ IDEA DMG 마운트에 실패했습니다."
+        cleanup_intellij_install
+        return 1
+    fi
+    mounted=1
+
+    source_app=$(find "$mount_dir" -maxdepth 1 -name "*.app" -print -quit)
+    if [ -z "$source_app" ]; then
+        echo "DMG에서 IntelliJ IDEA 앱 번들을 찾을 수 없습니다."
+        cleanup_intellij_install
+        return 1
+    fi
+
+    echo "앱 설치 중: $INTELLIJ_APP_PATH"
+    if ! ditto "$source_app" "$INTELLIJ_APP_PATH"; then
+        echo "IntelliJ IDEA 앱 복사에 실패했습니다."
+        cleanup_intellij_install
+        return 1
+    fi
+
+    mkdir -p "$HOME/.local/bin"
+    ln -sf "$INTELLIJ_APP_PATH/Contents/MacOS/idea" "$INTELLIJ_LAUNCHER"
+    cleanup_intellij_install
+
+    echo "=== IntelliJ IDEA Ultimate 설치 완료! ==="
+    echo "설치 경로: $INTELLIJ_APP_PATH"
+    echo "CLI launcher: $INTELLIJ_LAUNCHER"
+}
+
 install_java() {
     echo "=== Java 설치 시작 ==="
 
@@ -530,6 +620,9 @@ case "$COMPONENT" in
     vscode)
         install_vscode
         ;;
+    intellij)
+        install_intellij
+        ;;
     java)
         install_java
         ;;
@@ -550,6 +643,7 @@ case "$COMPONENT" in
         install_claude
         install_obsidian
         install_vscode
+        install_intellij
         install_java
         install_vim
         install_tmux
@@ -562,7 +656,7 @@ case "$COMPONENT" in
         install_1password
         ;;
     *)
-        echo "Usage: ./install.sh [zsh|vim|tmux|karabiner|ghostty|localsend|claude|obsidian|vscode|java|maven|dbeaver|discretescroll|1password|all]"
+        echo "Usage: ./install.sh [zsh|vim|tmux|karabiner|ghostty|localsend|claude|obsidian|vscode|intellij|java|maven|dbeaver|discretescroll|1password|all]"
         echo "  zsh             - zsh 설정 (oh-my-zsh, powerlevel9k, bat, fasd)"
         echo "  vim             - vim 설정만 설치"
         echo "  tmux            - tmux 설정만 설치"
@@ -572,6 +666,7 @@ case "$COMPONENT" in
         echo "  claude          - Claude Code CLI 설치/업데이트"
         echo "  obsidian        - Obsidian 설치 및 플러그인/설정 적용"
         echo "  vscode          - Visual Studio Code 설치"
+        echo "  intellij        - IntelliJ IDEA Ultimate 2025.1.7.1 설치"
         echo "  java            - Amazon Corretto 17, 21 설치"
         echo "  maven           - Maven 설치 및 settings.xml 템플릿 적용"
         echo "  dbeaver         - DBeaver Community 설치"
