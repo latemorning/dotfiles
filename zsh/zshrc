@@ -28,3 +28,6 @@ alias emz="vim ~/.zshrc"
 
 # 머신별 설정
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
+
+# Hermes Agent — ensure ~/.local/bin is on PATH
+export PATH="$HOME/.local/bin:$PATH"

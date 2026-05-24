@@ -2,3 +2,6 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 
 # 머신별 설정
 [[ -f ~/.zprofile.local ]] && source ~/.zprofile.local
+
+# Hermes Agent — ensure ~/.local/bin is on PATH
+export PATH="$HOME/.local/bin:$PATH"

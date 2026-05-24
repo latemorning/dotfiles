@@ -63,6 +63,14 @@ install_vim() {
     echo "심볼릭 링크 생성 중..."
     ln -sf ~/dotfiles/vim/my_configs.vim ~/.vim_runtime/my_configs.vim
 
+    if command -v swiftc &>/dev/null; then
+        echo "macOS 입력 소스 전환 도구 빌드 중..."
+        mkdir -p ~/.local/bin
+        swiftc ~/dotfiles/vim/select-input-source.swift -framework Carbon -o ~/.local/bin/select-input-source
+    else
+        echo "swiftc가 없어 macOS 입력 소스 전환 도구 빌드를 건너뜁니다."
+    fi
+
     echo "=== vim 설치 완료! ==="
 }
 
