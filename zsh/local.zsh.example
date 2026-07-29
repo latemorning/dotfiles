@@ -1,9 +1,6 @@
 # ~/.zshrc.local - 머신별 설정 (git 미추적)
 # 이 파일을 ~/.zshrc.local 로 복사 후 환경에 맞게 수정하세요
 
-# FZF
-export FZF_BASE="/opt/homebrew/Cellar/fzf/0.29.0"
-
 # Java
 export JAVA_HOME_8=$(/usr/libexec/java_home -v8 2>/dev/null)
 export JAVA_HOME_11=$(/usr/libexec/java_home -v11 2>/dev/null)
