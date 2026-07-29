@@ -311,6 +311,23 @@ test_linearmouse_replaces_discretescroll() {
     assert_log_not_contains "$brew_log" "install --cask discretescroll"
 }
 
+test_tailscale_uses_homebrew_cask() {
+    local case_dir="$TEST_TMP/tailscale"
+    local test_home="$case_dir/home"
+    local mock_bin="$case_dir/bin"
+    local brew_log="$case_dir/brew.log"
+
+    prepare_home "$test_home"
+    create_mock_commands "$mock_bin"
+    : >"$brew_log"
+
+    if ! run_component tailscale "$test_home" "$mock_bin" "$brew_log"; then
+        fail "tailscale install failed"
+    fi
+
+    assert_log_contains "$brew_log" "install --cask tailscale"
+}
+
 test_obsidian_rejects_unresolved_required_plugin() {
     local case_dir="$TEST_TMP/obsidian-unresolved"
     local test_home="$case_dir/home"
@@ -367,6 +384,7 @@ test_shellenv_failure_is_not_masked
 test_claude_code_uses_homebrew_cask
 test_tmux_installs_yazi
 test_linearmouse_replaces_discretescroll
+test_tailscale_uses_homebrew_cask
 test_obsidian_rejects_unresolved_required_plugin
 test_obsidian_requires_main_but_allows_missing_styles
 

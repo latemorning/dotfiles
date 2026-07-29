@@ -4,12 +4,12 @@
 
 이 저장소는 macOS 개발 환경을 재현하기 위한 개인 dotfiles 저장소입니다. 핵심 진입점은 `install.sh`이며, Homebrew 기반 설치, 외부 도구 설치, 설정 파일 심볼릭 링크, 템플릿 복사를 컴포넌트별로 수행합니다.
 
-주요 대상은 zsh, Vim, tmux, Karabiner-Elements, Ghostty, Claude, Obsidian, Visual Studio Code, IntelliJ IDEA Ultimate, Java, Maven, DBeaver, LocalSend, LinearMouse, 1Password입니다.
+주요 대상은 zsh, Vim, tmux, Karabiner-Elements, Ghostty, Claude, Obsidian, Visual Studio Code, IntelliJ IDEA Ultimate, Java, Maven, DBeaver, LocalSend, Tailscale, LinearMouse, 1Password입니다.
 
 ## 실행 방식
 
 - 전체 설치: `./install.sh` 또는 `./install.sh all`
-- 개별 설치: `./install.sh zsh|vim|tmux|karabiner|ghostty|localsend|claude|obsidian|vscode|intellij|java|maven|dbeaver|linearmouse|1password`
+- 개별 설치: `./install.sh zsh|vim|tmux|karabiner|ghostty|localsend|tailscale|claude|obsidian|vscode|intellij|java|maven|dbeaver|linearmouse|1password`
 - 설치 스크립트는 Homebrew 설치 확인, 패키지 설치, GitHub clone, curl 다운로드, 심볼릭 링크 생성, 템플릿 복사를 수행합니다.
 - Homebrew를 처음 설치한 경우 현재 프로세스에 `brew shellenv`를 적용하며, 설치 실패가 발생하면 즉시 중단합니다.
 - 설정 파일 경로는 `install.sh`의 실제 위치를 기준으로 계산하므로 저장소 clone 경로에 의존하지 않습니다.

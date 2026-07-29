@@ -574,6 +574,21 @@ install_localsend() {
     echo "=== LocalSend 설치 완료! ==="
 }
 
+install_tailscale() {
+    echo "=== Tailscale 설치 시작 ==="
+
+    ensure_homebrew
+
+    if ! brew list --cask tailscale &>/dev/null; then
+        echo "Tailscale 설치 중..."
+        brew install --cask tailscale
+    else
+        echo "Tailscale 이미 설치되어 있습니다."
+    fi
+
+    echo "=== Tailscale 설치 완료! ==="
+}
+
 install_linearmouse() {
     echo "=== LinearMouse 설치 시작 ==="
 
@@ -637,6 +652,9 @@ case "$COMPONENT" in
     localsend)
         install_localsend
         ;;
+    tailscale)
+        install_tailscale
+        ;;
     claude)
         install_claude
         ;;
@@ -676,19 +694,21 @@ case "$COMPONENT" in
         install_karabiner
         install_ghostty
         install_localsend
+        install_tailscale
         install_maven
         install_dbeaver
         install_linearmouse
         install_1password
         ;;
     *)
-        echo "Usage: ./install.sh [zsh|vim|tmux|karabiner|ghostty|localsend|claude|obsidian|vscode|intellij|java|maven|dbeaver|linearmouse|1password|all]"
+        echo "Usage: ./install.sh [zsh|vim|tmux|karabiner|ghostty|localsend|tailscale|claude|obsidian|vscode|intellij|java|maven|dbeaver|linearmouse|1password|all]"
         echo "  zsh             - zsh 설정 (oh-my-zsh, powerlevel9k, fzf, zoxide, bat)"
         echo "  vim             - vim 설정만 설치"
         echo "  tmux            - tmux 설정만 설치"
         echo "  karabiner       - Karabiner-Elements 설정만 설치"
         echo "  ghostty         - Ghostty 설치 및 설정"
         echo "  localsend       - LocalSend 설치"
+        echo "  tailscale       - Tailscale 설치"
         echo "  claude          - Claude 앱 및 Claude Code CLI 설치"
         echo "  obsidian        - Obsidian 설치 및 플러그인/설정 적용"
         echo "  vscode          - Visual Studio Code 설치"
